@@ -1,0 +1,19 @@
+services:
+  rpg-rules:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    entrypoint: ["/app/start.sh"]
+    depends_on:
+      download-gemma-llm:
+        condition: service_started
+    environment:
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL}
+    # docker compose watch
+    develop:
+      watch:
+        - action: rebuild
+          path: app
+          target: app
+    ports:
+      - 8501:8501
